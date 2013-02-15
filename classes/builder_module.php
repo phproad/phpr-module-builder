@@ -1,0 +1,28 @@
+<?php
+
+class Builder_Module extends Core_Module_Base
+{
+
+    protected function set_module_info()
+    {
+        return new Core_Module_Detail(
+            "Builder",
+            "Builder Module",
+            "Scripts Ahoy!",
+            "http://scriptsahoy.com/"
+        );
+    }
+
+    public function build_admin_menu($menu)
+    {
+        $top = $menu->add('builder', 'Builders', 'builder/menus')->permission(array('manage_menus'));
+        $top->add_child('menus', 'Menus', 'builder/menus', 600)->permission('manage_menus');
+    }
+
+
+    public function build_admin_permissions($host)
+    {
+        $host->add_permission_field($this, 'manage_menus', 'Manage Menus', 'right')->display_as(frm_checkbox)->comment('Modify and create site menus');
+    }
+
+}
