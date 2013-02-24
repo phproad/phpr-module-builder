@@ -11,9 +11,9 @@ class Builder_Menu_Item extends Db_ActiveRecord
 	public $act_as_tree_name_field = 'label';
 	protected $categories_column;
 
-    protected $added_fields = array();
-    protected $menu_type_obj = null;
-    public $class_name = null;
+	protected $added_fields = array();
+	protected $menu_type_obj = null;
+	public $class_name = null;
 
 	protected static $item_list = null;
 
@@ -34,11 +34,11 @@ class Builder_Menu_Item extends Db_ActiveRecord
 
 	public function define_form_fields($context = null)
 	{
-        $type_obj = $this->get_menu_type_object();
-        
-        if ($type_obj)
-            $type_obj->build_config_form($this, $context);        
-        
+		$type_obj = $this->get_menu_type_object();
+		
+		if ($type_obj)
+			$type_obj->build_config_form($this, $context);        
+		
 		$this->add_form_field('label', 'left')->tab('Properties');
 		$this->add_form_field('title', 'right')->tab('Properties');
 		$this->add_form_field('element_id', 'left')->tab('Properties')->comment('This ID will be bound to the list item (LI) tag', 'above');
@@ -71,112 +71,112 @@ class Builder_Menu_Item extends Db_ActiveRecord
 		}
 	}
 
-    public function before_validation($session_key=null)
-    {
-     	$this->get_menu_type_object()->build_menu_item($this);
-    }
+	public function before_validation($session_key=null)
+	{
+		$this->get_menu_type_object()->build_menu_item($this);
+	}
 
 	// Getters
 	//
 
-    public function get_menu_type_object()
-    {
-        if ($this->menu_type_obj !== null)
-            return $this->menu_type_obj;
+	public function get_menu_type_object()
+	{
+		if ($this->menu_type_obj !== null)
+			return $this->menu_type_obj;
 
-        if (!$this->class_name)
-            $this->class_name = post('menu_item_class_name', 'Builder_Link_Menu_Item');
+		if (!$this->class_name)
+			$this->class_name = post('menu_item_class_name', 'Builder_Link_Menu_Item');
 
-        if (!Phpr::$class_loader->load($this->class_name))
-            throw new Phpr_ApplicationException("Class {$this->class_name} not found");
+		if (!Phpr::$class_loader->load($this->class_name))
+			throw new Phpr_ApplicationException("Class {$this->class_name} not found");
 
-        $class_name = $this->class_name;
+		$class_name = $this->class_name;
 
-        return $this->menu_type_obj = new $class_name();
-    }
+		return $this->menu_type_obj = new $class_name();
+	}
 
-    // Custom fields
-    //
+	// Custom fields
+	//
 
-    public function add_field($code, $title, $side = 'full', $type = db_text, $tab = 'Event', $hidden = false)
-    {
-        $this->define_dynamic_column($code, $title, $type)->validation();
-        if (!$hidden)
-            $form_field = $this->add_dynamic_form_field($code, $side)->options_method('get_added_field_options')->option_state_method('get_added_field_option_state')->tab($tab);
-        else
-            $form_field = null;
+	public function add_field($code, $title, $side = 'full', $type = db_text, $tab = 'Event', $hidden = false)
+	{
+		$this->define_dynamic_column($code, $title, $type)->validation();
+		if (!$hidden)
+			$form_field = $this->add_dynamic_form_field($code, $side)->options_method('get_added_field_options')->option_state_method('get_added_field_option_state')->tab($tab);
+		else
+			$form_field = null;
 
-        $this->added_fields[$code] = $form_field;
+		$this->added_fields[$code] = $form_field;
 
-        return $form_field;
-    }    
+		return $form_field;
+	}    
 
-    public function get_added_field_options($db_name)
-    {     
-        $obj = $this->get_menu_type_object();
-        $method_name = "get_{$db_name}_options";
-        if (method_exists($obj, $method_name))
-            return $obj->$method_name($this);
+	public function get_added_field_options($db_name)
+	{     
+		$obj = $this->get_menu_type_object();
+		$method_name = "get_{$db_name}_options";
+		if (method_exists($obj, $method_name))
+			return $obj->$method_name($this);
 
-        throw new Phpr_SystemException("Method {$method_name} is not defined in {$this->class_name} class.");
-    }
-    
-    public function get_added_field_option_state($db_name, $key_value)
-    {       
-        $obj = $this->get_menu_type_object();
-        $method_name = "get_{$db_name}_option_state";
-        if (method_exists($obj, $method_name))
-            return $obj->$method_name($key_value);
-            
-        throw new Phpr_SystemException("Method {$method_name} is not defined in {$this->class_name} class.");
-    }
+		throw new Phpr_SystemException("Method {$method_name} is not defined in {$this->class_name} class.");
+	}
+	
+	public function get_added_field_option_state($db_name, $key_value)
+	{       
+		$obj = $this->get_menu_type_object();
+		$method_name = "get_{$db_name}_option_state";
+		if (method_exists($obj, $method_name))
+			return $obj->$method_name($key_value);
+			
+		throw new Phpr_SystemException("Method {$method_name} is not defined in {$this->class_name} class.");
+	}
 
 	// Service methods
 	//
 
-    public function display_frontend($options = array(), &$str = null)
-    {
-        if (!$str)
-            $str = "";
+	public function display_frontend($options = array(), &$str = null)
+	{
+		if (!$str)
+			$str = "";
 
-        $controller = Builder_Controller::get_instance();
-    	$page = ($controller) ? $controller->page : null;
-        $children = $this->list_children('sort_order');
+		$controller = Builder_Controller::get_instance();
+		$page = ($controller) ? $controller->page : null;
+		$children = $this->list_children('sort_order');
 
-        $a_href = root_url($this->url);
-        if ($this->url != '/' && $this->url_suffix) $a_href .= '/';
-        if ($this->url_suffix) $a_href .= $this->url_suffix;
+		$a_href = root_url($this->url);
+		if ($this->url != '/' && $this->url_suffix) $a_href .= '/';
+		if ($this->url_suffix) $a_href .= $this->url_suffix;
 
-        $li_class = $this->element_class;
-        
-        $is_active = ($page && $page->url == $this->url);
+		$li_class = $this->element_class;
+		
+		$is_active = ($page && $page->url == $this->url);
 
-    	if ($children->count)
-    		$li_class .= " ".$options['class_dropdown_container'];
+		if ($children->count)
+			$li_class .= " ".$options['class_dropdown_container'];
 
-    	if ($is_active)
-    		$li_class .= " active";
+		if ($is_active)
+			$li_class .= " active";
 
-        $str .= '<li class="'.trim($li_class).'">'.PHP_EOL;
-        $str .= '<a href="'.$a_href.'">';
-        $str .= $this->label;
-        $str .= '</a>'.PHP_EOL;
+		$str .= '<li class="'.trim($li_class).'">'.PHP_EOL;
+		$str .= '<a href="'.$a_href.'">';
+		$str .= $this->label;
+		$str .= '</a>'.PHP_EOL;
 
-        if ($children->count)
-        {
-        	$ul_class = $options['class_dropdown'];
+		if ($children->count)
+		{
+			$ul_class = $options['class_dropdown'];
 
-            $str .= '<ul class="'.$ul_class.'">'.PHP_EOL;
-            foreach ($children as $child)
-            {
-                $child->display_frontend($options, $str);
-            }
-            $str .= "</ul>".PHP_EOL;
-        }
+			$str .= '<ul class="'.$ul_class.'">'.PHP_EOL;
+			foreach ($children as $child)
+			{
+				$child->display_frontend($options, $str);
+			}
+			$str .= "</ul>".PHP_EOL;
+		}
 
-        $str .= "</li>".PHP_EOL;
-        return $str;
-    }
+		$str .= "</li>".PHP_EOL;
+		return $str;
+	}
 
 	public function get_url($recache=false)
 	{

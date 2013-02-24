@@ -35,12 +35,12 @@ class Builder_Menu extends Db_ActiveRecord
 		$this->add_form_field('name', 'left')->tab('Menu')->validation()->required();
 		$this->add_form_field('code', 'right')->tab('Menu')->validation()->required();
 		$this->add_form_field('short_description', 'full')->tab('Menu');
-        
-        if (!$this->is_new_record())
-        {
-            $this->add_form_section('Select which items you would like to appear in the menu', 'Menu Items')->tab('Menu');
-            $this->add_form_field('items')->tab('Menu')->display_as('items')->comment('Drag and drop the menu items below to sort or nest them.', 'above')->no_label();
-        }
+		
+		if (!$this->is_new_record())
+		{
+			$this->add_form_section('Select which items you would like to appear in the menu', 'Menu Items')->tab('Menu');
+			$this->add_form_field('items')->tab('Menu')->display_as('items')->comment('Drag and drop the menu items below to sort or nest them.', 'above')->no_label();
+		}
 	}
 
 	public function list_root_items($session_key=null)
@@ -58,27 +58,27 @@ class Builder_Menu extends Db_ActiveRecord
 	}
 
 
-    public function display_frontend($options = array(), &$str = null)
-    {
-    	$options = array_merge(array(
-    			'class_dropdown_container' => 'has-dropdown',
-    			'class_dropdown' => 'dropdown'
-    		), 
-    		$options);
+	public function display_frontend($options = array(), &$str = null)
+	{
+		$options = array_merge(array(
+				'class_dropdown_container' => 'has-dropdown',
+				'class_dropdown' => 'dropdown'
+			), 
+			$options);
 
-        if (!$str)
-            $str = "";
+		if (!$str)
+			$str = "";
 
-        $children = $this->list_root_items();
+		$children = $this->list_root_items();
 
-        if (!$children->count)
-        	return $str;
-        
-        foreach ($children as $child)
-        {
-            $child->display_frontend($options, $str);
-        }
+		if (!$children->count)
+			return $str;
+		
+		foreach ($children as $child)
+		{
+			$child->display_frontend($options, $str);
+		}
 
-        return $str;
-    }
+		return $str;
+	}
 }
