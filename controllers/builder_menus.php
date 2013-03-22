@@ -76,29 +76,29 @@ class Builder_Menus extends Admin_Controller
 
 	public function get_item_types()
 	{
-        $item_types = Builder_Menu_Item_Base::find_items();
+		$item_types = Builder_Menu_Item_Base::find_items();
 
-        $type_list = array();
-        foreach ($item_types as $class_name)
-        {
-            $obj = new $class_name();
-            $info = $obj->get_info();
-            if (array_key_exists('name', $info))
-            {
-                $info['class_name'] = $class_name;
-                $type_list[] = $info;
-            }
-        }
+		$type_list = array();
+		foreach ($item_types as $class_name)
+		{
+			$obj = new $class_name();
+			$info = $obj->get_info();
+			if (array_key_exists('name', $info))
+			{
+				$info['class_name'] = $class_name;
+				$type_list[] = $info;
+			}
+		}
 
-        usort($type_list, array('Builder_Menus', 'item_type_cmp'));
+		usort($type_list, array('Builder_Menus', 'item_type_cmp'));
 
-        return $type_list;
+		return $type_list;
 	}
 
-    public static function item_type_cmp($a, $b)
-    {
-        return strcasecmp($a['name'], $b['name']);
-    }
+	public static function item_type_cmp($a, $b)
+	{
+		return strcasecmp($a['name'], $b['name']);
+	}
 
 	protected function index_on_delete_selected()
 	{
