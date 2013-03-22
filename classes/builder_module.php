@@ -8,14 +8,14 @@ class Builder_Module extends Core_Module_Base
         return new Core_Module_Detail(
             "Builder",
             "Builder Module",
-            "Scripts Ahoy!",
-            "http://scriptsahoy.com/"
+            "PHP Road",
+            "http://phproad.com/"
         );
     }
 
     public function build_admin_menu($menu)
     {
-        $top = $menu->add('builder', 'Builders', 'builder/menus')->permission(array('manage_menus'));
+        $top = $menu->add('builder', 'Builder', 'builder/menus')->icon('wrench')->permission(array('manage_menus'));
         $top->add_child('menus', 'Menus', 'builder/menus', 600)->permission('manage_menus');
     }
 
