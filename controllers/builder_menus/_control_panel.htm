@@ -1,6 +1,5 @@
-<div class="toolbar">
-	<?= cp_button('Add menu', 'add', url('/builder/menus/create')) ?>
-	<div class="separator">&nbsp;</div>
-	<?= cp_button('Delete selected', 'delete', array('href'=>'#', 'onclick'=>"return delete_selected()")) ?>
-	<div class="clear"></div>
-</div>
+<ul class="nav">
+	<li><?= cp_button('Add menu', 'plus', url('/builder/menus/create')) ?></li>
+	<li class="divider-vertical"></li>
+	<li><?= cp_button('Delete selected', 'remove', array('href'=>'#', 'onclick'=>"return delete_selected()")) ?></li>
+</ul>
