@@ -1,6 +1,6 @@
 <?php
 
-class Builder_Page_Menu_Item extends Builder_Menu_Item_Base
+class Builder_Page_Menu extends Builder_Menu_Base
 {
 	public function get_info()
 	{
@@ -10,7 +10,7 @@ class Builder_Page_Menu_Item extends Builder_Menu_Item_Base
 		);
 	}
 
-	public function build_config_form($host)
+	public function build_config_ui($host)
 	{
 		$host->add_field('page_id', 'Page', 'full', db_number, 'Link')
 			->comment('Please select the Page to link to', 'above')

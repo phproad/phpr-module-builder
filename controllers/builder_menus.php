@@ -25,7 +25,7 @@ class Builder_Menus extends Admin_Controller
 	public $list_search_fields = array('name', 'description');
 	public $list_search_prompt = 'find menus by name or description';
 	public $list_custom_partial = '';
-	public $list_custom_prepare_func = 'listCustomPrepare';
+	public $list_custom_prepare_func = 'list_custom_prepare';
 	public $list_custom_body_cells = '';
 	public $list_custom_head_cells = '';
 	public $list_items_per_page = 20;
@@ -45,7 +45,7 @@ class Builder_Menus extends Admin_Controller
 
 	public function __construct()
 	{
-		Phpr::$events->fire_event('builder:onConfigureMenusPage', $this);
+		Phpr::$events->fire_event('builder:on_configure_menus_page', $this);
 
 		parent::__construct();
 		$this->app_menu = 'builder';
@@ -57,9 +57,9 @@ class Builder_Menus extends Admin_Controller
 		$this->app_page = 'menus';
 	}
 
-	public function listCustomPrepare($model, $options)
+	public function list_custom_prepare($model, $options)
 	{
-		$updated_data = Phpr::$events->fire_event('builder:onPrepareListCustomData', $model, $options);
+		$updated_data = Phpr::$events->fire_event('builder:on_prepare_list_custom_data', $model, $options);
 		foreach ($updated_data as $updated)
 		{
 			if ($updated)
@@ -76,28 +76,14 @@ class Builder_Menus extends Admin_Controller
 
 	public function get_item_types()
 	{
-		$item_types = Builder_Menu_Item_Base::find_items();
-
-		$type_list = array();
-		foreach ($item_types as $class_name)
-		{
-			$obj = new $class_name();
-			$info = $obj->get_info();
-			if (array_key_exists('name', $info))
-			{
-				$info['class_name'] = $class_name;
-				$type_list[] = $info;
-			}
-		}
-
-		usort($type_list, array('Builder_Menus', 'item_type_cmp'));
-
+		$type_list = Builder_Menu_Manager::get_menu_types();
+		usort($type_list, array('Builder_Menus', 'item_type_compare'));
 		return $type_list;
 	}
 
-	public static function item_type_cmp($a, $b)
+	public static function item_type_compare($a, $b)
 	{
-		return strcasecmp($a['name'], $b['name']);
+		return strcasecmp($a->get_name(), $b->get_name());
 	}
 
 	protected function index_on_delete_selected()

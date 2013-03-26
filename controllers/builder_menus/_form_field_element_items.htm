@@ -1,14 +1,17 @@
-
-<div class="toolbar">
-	<? foreach ($this->get_item_types() as $info): ?>
-		<?
-			$description = (isset($info['description'])) ? $info['description'] : '';
-			$name = (isset($info['name'])) ? $info['name'] : 'Link';
-		?>
-		<?= cp_button(h($name), 'tooltip doc_add', array('title'=>$description, 'href'=>'javascript:;', 'onclick'=>"new PopupForm('on_load_item_form', {ajaxFields: { 'menu_item_class_name': '".$info['class_name']."' }  }); return false;")) ?>
-	<? endforeach ?>
-	<div class="clear"></div>
+<div class="navbar scroll-toolbar">
+	<div class="navbar-inner">
+		<ul class="nav">
+			<? foreach ($this->get_item_types() as $info): ?>
+				<?
+					$description = $info->get_description();
+					$name = $info->get_name();
+				?>
+				<li><?= cp_button(h($name), 'plus', array('title'=>$description, 'class'=>'has-tooltip', 'href'=>'javascript:;', 'onclick'=>"new PopupForm('on_load_item_form', {ajaxFields: { 'menu_item_class_name': '".get_class($info)."' }  }); return false;")) ?></li>
+			<? endforeach ?>
+		</ul>
+	</div>
 </div>
+
 
 <div class="alert">
 	<p><strong>Hint!</strong> Drag and drop the menu items below to sort or nest them.</p>

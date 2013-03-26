@@ -1,0 +1,33 @@
+<? Admin_Breadcrumb::add('Users', 'user/users')->add($this->app_page_title);?>
+<? Phpr_View::begin_block("view") ?>
+	<?=flash()?>
+
+	<? if (!isset($fatalError)): ?>
+		<div class="form-750">
+			<?=Phpr_Form::open_tag() ?>
+
+				<? $this->form_render() ?>
+
+				<div id="fixed-toolbar" class="top">
+					<div class="form-toolbar">
+						<?=admin_ajax_button('Save', $this->get_event_handler('on_save'), array('class'=>'btn-success'),
+							"prepareFunction: function(){phprTriggerSave();},
+							extraFields: {redirect: 0},
+							loadIndicator: {show: false},
+							onBeforePost: LightLoadingIndicator.show('Saving...'),
+							onComplete: LightLoadingIndicator.hide")
+						?>
+						<?=admin_ajax_button('Save and Close', $this->get_event_handler('on_save'), array('class'=>'btn-primary'),
+							"prepareFunction: function(){phprTriggerSave();}"
+						) ?>
+						<?=admin_ajax_button('Cancel', 'edit_on_cancel') ?>
+						<?=admin_ajax_button('Delete', 'edit_on_delete', array('class'=>"btn-danger pull-right"), "confirm: 'Do you really want to delete this provider?'") ?>
+					</div>
+				</div>
+
+			</form>
+		</div>
+	<? else: ?>
+		<p><a href="<?=url('/builder/forms') ?>">Return to the form list</a></p>
+	<? endif ?>
+<? Phpr_View::end_block() ?>
