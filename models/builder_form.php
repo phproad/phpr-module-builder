@@ -8,11 +8,6 @@ class Builder_Form extends Db_ActiveRecord
 		'fields'=>array('class_name'=>'Builder_Form_Field', 'foreign_key'=>'form_id', 'order'=>'sort_order, id', 'delete'=>true)
 	);
 
-	public static function create()
-	{
-		return new self();
-	}
-
 	public function define_columns($context = null)
 	{
 		$this->define_column('name', 'Name')->order('asc')->validation()->fn('trim')->required('Please specify the menu name.');
@@ -28,17 +23,18 @@ class Builder_Form extends Db_ActiveRecord
 		$this->add_form_field('code', 'right')->tab('Form')->validation()->required();
 		$this->add_form_field('short_description', 'full')->tab('Form');
 
-
 		// Fields
 		$this->add_form_field('fields')->display_as(frm_widget, array(
 			'class'=>'Db_List_Widget', 
-			'columns' => array('code'),
+			'columns' => array('label', 'code'),
 			'search_enabled' => false,
 			'no_data_message' => 'This form has no fields yet',
 			'control_panel' => 'fields_control_panel',
 			'is_editable' => true,
 			'form_title' => 'Field',
-			'form_context' => 'create'
+			'show_reorder' => true,
+			'show_checkboxes' => true,
+			'show_delete_icon' => true,
 		))->tab('Form');  		
 	}
 }

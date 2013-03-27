@@ -1,6 +1,6 @@
 <? Phpr_View::begin_block("head") ?>
-	<script type="text/javascript" src="modules/builder/assets/javascript/menu_form.js"></script>
-	<link rel="stylesheet" type="text/css" href="modules/builder/assets/css/menu_form.css">
+	<script type="text/javascript" src="modules/builder/assets/scripts/js/menu_form.js"></script>
+	<link rel="stylesheet" type="text/css" href="modules/builder/assets/stylesheets/css/menu_form.css">
 <? Phpr_View::end_block() ?>
 
 <? Phpr_View::begin_block("view") ?>
@@ -26,6 +26,6 @@
 		</div>
 
 	<? else: ?>
-		<p><a href="<?= url('/builder/menus') ?>">Return to the menu list</a></p>
+		<p><a href="<?= url('builder/menus') ?>">Return to the menu list</a></p>
 	<? endif ?>
 <? Phpr_View::end_block() ?>

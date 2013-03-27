@@ -1,17 +1,21 @@
-<? Admin_Breadcrumb::add('Services', 'services')->add($this->app_page_title);?>
+<? Admin_Breadcrumb::add('Builder', 'builder')->add($this->app_page_title);?>
+<? Phpr_View::begin_block("head") ?>
+	<script type="text/javascript" src="modules/builder/assets/scripts/js/form_form.js"></script>
+<? Phpr_View::end_block() ?>
 <? Phpr_View::begin_block("view") ?>
 	<?=flash()?>
 
 	<? if (!isset($fatalError)): ?>
 		<div class="form-750">
 			<?=Phpr_Form::open_tag() ?>
+				<input type="hidden" name="new_flag" value="1" id="new_flag" />
 
 				<? $this->form_render() ?>
 
 				<div id="fixed-toolbar" class="top">
 					<div class="form-toolbar">
 						<?=admin_ajax_button('Create', $this->get_event_handler('on_save'), array('class'=>'btn-success')) ?>
-						<?=admin_ajax_button('Save and Close', $this->get_event_handler('on_save'), array('class'=>'btn-primary'), "extraFields: {create_close: 1}") ?>
+						<?=admin_ajax_button('Create and Close', $this->get_event_handler('on_save'), array('class'=>'btn-primary'), "extraFields: {create_close: 1}") ?>
 						<?=admin_ajax_button('Cancel', $this->get_event_handler('on_cancel')) ?>
 					</div>
 				</div>
@@ -19,6 +23,6 @@
 			</form>
 		</div>
 	<? else: ?>
-		<p><a href="<?=url('/builder/forms') ?>">Return to the form list</a></p>
+		<p><a href="<?= url('builder/forms') ?>">Return to the form list</a></p>
 	<? endif ?>
 <? Phpr_View::end_block() ?>

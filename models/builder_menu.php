@@ -15,11 +15,6 @@ class Builder_Menu extends Db_ActiveRecord
 		'item_count'=>array('sql'=>"(select count(*) from builder_menu_items WHERE menu_id=builder_menus.id)", 'type'=>db_number),
 	);
 
-	public static function create()
-	{
-		return new self();
-	}
-
 	public function define_columns($context = null)
 	{
 		$this->define_column('name', 'Name')->order('asc')->validation()->fn('trim')->required('Please specify the menu name.');

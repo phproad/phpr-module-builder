@@ -5,7 +5,7 @@ class Builder_Forms extends Admin_Controller
 	public $implement = 'Db_ListBehavior, Db_FormBehavior';
 	public $list_model_class = 'Builder_Form';
 	public $list_record_url = null;
-    public $list_record_onclick = null;
+	public $list_record_onclick = null;
 
 	public $form_preview_title = 'Form';
 	public $form_create_title = 'New Form';
@@ -40,6 +40,7 @@ class Builder_Forms extends Admin_Controller
 
 		$this->list_record_url = url('builder/forms/edit');
 		$this->form_redirect = url('builder/forms');
+		$this->form_create_save_redirect = url('builder/forms/edit/%s');
 
 		parent::__construct();
 	}
@@ -49,11 +50,46 @@ class Builder_Forms extends Admin_Controller
 		$this->app_page_title = 'Forms';
 	}
 
-	public function get_item_types()
+	public function get_field_types()
 	{
-		$type_list = Builder_Menu_Manager::get_menu_types();
-		usort($type_list, array('Builder_Menus', 'item_type_compare'));
-		return $type_list;
+		$field_list = Builder_Form_Manager::get_field_types();
+		usort($field_list, array('Builder_Forms', 'field_type_compare'));
+		return $field_list;
 	}
+
+	// Controller Events
+	// 
+
+	public function listwidget_before_form_popup_fields($model)
+	{
+		if ($model->is_new_record()) {
+			$model->class_name = post('class_name');
+			$model->form_fields_defined = false;
+			$model->reset_form_fields()->define_form_fields();
+		}
+	}
+
+	public function listwidget_before_form_update_fields($model)
+	{
+		if ($model->is_new_record()) {
+			$model->class_name = post('class_name');
+			$model->init_field_extension();
+		}
+	}
+
+	public function form_after_create_save($page, $session_key)
+	{
+		if (post('create_close'))
+			$this->form_create_save_redirect = url('builder/forms');
+	}	
+
+	// Internals
+	// 
+
+	public static function field_type_compare($a, $b)
+	{
+		return strcasecmp($a->get_name(), $b->get_name());
+	}
+
 }
 

@@ -51,9 +51,9 @@ class Builder_Menus extends Admin_Controller
 		$this->app_menu = 'builder';
 		$this->app_module_name = 'Menus';
 
-		$this->list_record_url = url('/builder/menus/edit/');
-		$this->form_redirect = url('/builder/menus');
-		$this->form_create_save_redirect = url('/builder/menus/edit/%s/'.uniqid());
+		$this->list_record_url = url('builder/menus/edit');
+		$this->form_redirect = url('builder/menus');
+		$this->form_create_save_redirect = url('builder/menus/edit/%s/'.uniqid());
 		$this->app_page = 'menus';
 	}
 
@@ -79,11 +79,6 @@ class Builder_Menus extends Admin_Controller
 		$type_list = Builder_Menu_Manager::get_menu_types();
 		usort($type_list, array('Builder_Menus', 'item_type_compare'));
 		return $type_list;
-	}
-
-	public static function item_type_compare($a, $b)
-	{
-		return strcasecmp($a->get_name(), $b->get_name());
 	}
 
 	protected function index_on_delete_selected()
@@ -144,7 +139,7 @@ class Builder_Menus extends Admin_Controller
 	public function form_after_create_save($page, $session_key)
 	{
 		if (post('create_close'))
-			$this->form_create_save_redirect = url('/builder/menus').'?'.uniqid();
+			$this->form_create_save_redirect = url('builder/menus').'?'.uniqid();
 	}
 
 	public function list_get_row_class($model)
@@ -284,5 +279,13 @@ class Builder_Menus extends Admin_Controller
 	private function getModelObj($id)
 	{
 		return strlen($id) ? $this->form_find_model_object($id) : (new $this->form_model_class);
+	}
+
+	// Internals
+	// 
+
+	public static function item_type_compare($a, $b)
+	{
+		return strcasecmp($a->get_name(), $b->get_name());
 	}
 }

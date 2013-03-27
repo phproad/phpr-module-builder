@@ -33,9 +33,10 @@ $table = Db_Structure::table('builder_forms');
 
 $table = Db_Structure::table('builder_form_fields');
 	$table->primary_key('id');
-	$table->column('title', db_varchar);
-	$table->column('form_id', db_number)->index();
+	$table->column('label', db_varchar);
 	$table->column('code', db_varchar, 100)->index();
+	$table->column('comment', db_varchar);
+	$table->column('form_id', db_number)->index();
 	$table->column('class_name', db_varchar, 100)->index();
 	$table->column('config_data', db_text);
 	$table->column('sort_order', db_number);

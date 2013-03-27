@@ -1,16 +1,26 @@
 <ul class="nav">
-    <li><?= $widget->cp_create_button() ?></li>
+    
 	<li class="dropdown">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-			<i class="icon-user"></i> Assign to... 
+			<i class="icon-plus"></i> Add Field
 			<b class="caret"></b>
 		</a>
 		<ul class="dropdown-menu">
-			<li><a href="#"><i class="icon-tag"></i> Richie</a></li>
-			<li><a href="#"><i class="icon-tag"></i> Marion</a></li>
-			<li><a href="#"><i class="icon-tag"></i> Howard</a></li>
-			<li><a href="#"><i class="icon-tag"></i> Joanie</a></li>
-			<li><a href="#"><i class="icon-tag"></i> The Fonz</a></li>
+			<? foreach ($this->get_field_types() as $info): ?>
+				<?
+					$description = $info->get_description();
+					$name = $info->get_name();
+				?>
+				<li><?= $widget->cp_create_button('plus', array(
+					'label' => $name,
+					'data' => array('class_name' => get_class($info)),
+					'attributes' => array(
+						'title' => $description,
+						'data-placement' => 'right',
+						'class' => 'has-tooltip'
+					)
+				)) ?></li>
+			<? endforeach ?>			
 		</ul>
-	</li>    
+	</li>
 </ul>

@@ -1,10 +1,8 @@
-function menus_selected()
-{
+function menus_selected() {
 	return $('listCms_Menus_index_list_body').getElements('tr td.checkbox input').some(function(element){return element.checked});
 }
 
-function delete_selected()
-{
+function delete_selected() {
 	if (!menus_selected())
 	{
 		alert('Please select layouts to delete.');
@@ -30,8 +28,7 @@ jQuery(document).ready(function() {
 	make_items_sortable();
 });
 
-function updateItemList()
-{
+function updateItemList() {
 	cancelPopup();
 
 	$('item_list').getForm().sendPhpr(
@@ -50,8 +47,7 @@ function updateItemList()
 	)
 }
 
-function make_items_sortable(session_key)
-{
+function make_items_sortable(session_key) {
 	if (!$('item_list'))
 		return;
 
@@ -92,8 +88,7 @@ function make_items_sortable(session_key)
 	});
 }
 
-function delete_item(item_id)
-{
+function delete_item(item_id) {
 		return $('item_list').getForm().sendPhpr('on_delete_item', {
 		confirm: 'Do you really want to delete this menu item? Any child items will be kept.',
 		onFailure: popupAjaxError,

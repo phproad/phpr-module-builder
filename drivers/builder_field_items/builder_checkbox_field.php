@@ -10,4 +10,9 @@ class Builder_Checkbox_Field extends Builder_Field_Base
 		);
 	}
 
+	public function build_config_ui($host, $context = null)
+	{
+		$host->add_field('options', 'Checkbox Options', 'left', db_text)->comment('Use one line per option');
+	}
+
 }

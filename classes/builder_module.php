@@ -5,12 +5,15 @@ class Builder_Module extends Core_Module_Base
 
 	protected function set_module_info()
 	{
+		// Db_Update_Manager::apply_db_structure(PATH_APP, 'builder');
+
 		return new Core_Module_Detail(
 			"Builder",
 			"Builder Module",
 			"PHP Road",
 			"http://phproad.com/"
 		);
+
 	}
 
 	public function build_admin_menu($menu)
