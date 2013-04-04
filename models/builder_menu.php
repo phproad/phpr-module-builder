@@ -40,7 +40,7 @@ class Builder_Menu extends Db_ActiveRecord
 
 	public function list_root_items($session_key=null)
 	{
-		$all_items = $this->list_related_records_deferred('items', $session_key);
+		$all_items = $this->get_all_deferred('items', $session_key);
 		$items = array();
 		
 		foreach ($all_items->object_array as $item)
@@ -49,7 +49,7 @@ class Builder_Menu extends Db_ActiveRecord
 				$items[] = $item;
 		}
 
-		return new Db_DataCollection($items);
+		return new Db_Data_Collection($items);
 	}
 
 

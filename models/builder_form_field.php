@@ -3,9 +3,14 @@
 class Builder_Form_Field extends Db_ActiveRecord
 {
 	public $table_name = 'builder_form_fields';
-	public $implement = 'Db_Model_Dynamic';
+	public $implement = 'Db_Model_Dynamic, Db_Model_Sortable';
 
 	public $is_enabled = true;
+
+	public $custom_columns = array(
+		'field_type_name' => db_varchar,
+		'field_summary' => db_varchar
+	);
 
 	protected $added_fields = array();
 
@@ -21,6 +26,12 @@ class Builder_Form_Field extends Db_ActiveRecord
 		$this->define_column('label', 'Field Label')->validation()->required();
 		$this->define_column('code', 'Field Code')->validation()->required();
 		$this->define_column('comment', 'Field Comment');
+		$this->define_column('sort_order', 'Order');
+		$this->define_column('element_id', 'ID');
+		$this->define_column('element_class', 'Class');
+
+		$this->define_column('field_type_name', 'Field Type');
+		$this->define_column('field_summary', 'Summary');
 	}
 
 	public function define_form_fields($context = null)
@@ -32,10 +43,14 @@ class Builder_Form_Field extends Db_ActiveRecord
 		$this->form_context = $context;
 
 		// Build form
-		$this->add_form_field('is_enabled');
-		$this->add_form_field('label', 'left') ->comment('Label displayed on the front end.');
-		$this->add_form_field('code', 'right') ->comment('A unique code used to identify the field.');
-		$this->add_form_field('comment', 'full') ->comment('Comment to display next to this field. Eg: Please provide your full name.');
+		$this->add_form_field('label', 'left')->comment('Label displayed on the front end.')->tab('Field');
+		$this->add_form_field('code', 'right')->comment('A unique code used to identify the field.')->tab('Field');
+		$this->add_form_field('comment', 'full')->comment('Comment to display next to this field. Eg: Please provide your full name.')->tab('Field');
+
+		$this->add_form_field('is_enabled')->tab('Properties');
+		$this->add_form_field('element_id', 'left')->comment('For design purposes, you can enter a unique identifier for this field.')->tab('Properties');
+		$this->add_form_field('element_class', 'right')->comment('For design purposes, you can give this field a CSS class.')->tab('Properties');
+
 
 		// Field driver extension
 		if ($this->init_field_extension()) {
@@ -70,13 +85,26 @@ class Builder_Form_Field extends Db_ActiveRecord
 		return true;
 	}
 
+	// Custom columns
+	// 
+
+	public function eval_field_type_name()
+	{
+		return $this->get_name();
+	}
+
+	public function eval_field_summary()
+	{
+		return $this->get_summary($this);
+	}
+
 	// Dynamic model
 	// 
 
 	public function add_field($code, $title, $side = 'full', $type = db_text)
 	{
 		$form_column = $this->define_dynamic_column($code, $title, $type);
-		$form_field = $this->add_dynamic_form_field($code, $side);
+		$form_field = $this->add_dynamic_form_field($code, $side)->tab('Field');
 		$this->added_fields[$code] = $form_field;
 		return $form_field;
 	}	

@@ -2,7 +2,7 @@
 
 class Builder_Forms extends Admin_Controller
 {
-	public $implement = 'Db_ListBehavior, Db_FormBehavior';
+	public $implement = 'Db_List_Behavior, Db_Form_Behavior';
 	public $list_model_class = 'Builder_Form';
 	public $list_record_url = null;
 	public $list_record_onclick = null;
@@ -65,7 +65,7 @@ class Builder_Forms extends Admin_Controller
 		if ($model->is_new_record()) {
 			$model->class_name = post('class_name');
 			$model->form_fields_defined = false;
-			$model->reset_form_fields()->define_form_fields();
+			$model->reset_form_fields()->init_form_fields();
 		}
 	}
 
@@ -73,7 +73,8 @@ class Builder_Forms extends Admin_Controller
 	{
 		if ($model->is_new_record()) {
 			$model->class_name = post('class_name');
-			$model->init_field_extension();
+			$model->form_fields_defined = false;
+			$model->reset_form_fields()->init_form_fields();
 		}
 	}
 

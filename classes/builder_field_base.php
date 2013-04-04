@@ -37,4 +37,8 @@ class Builder_Field_Base extends Phpr_Driver_Base
 	 */
 	public function init_config_data($host) { }
 
+
+	// Returns a summary of the field's options or settings.
+	public function get_summary() {}
+
 }

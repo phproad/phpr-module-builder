@@ -4,7 +4,7 @@ class Builder_Menu_Item extends Db_ActiveRecord
 {
 	public $table_name = 'builder_menu_items';
 
-	public $implement = 'Db_Sortable, Db_Act_As_Tree, Db_Model_Dynamic';
+	public $implement = 'Db_Act_As_Tree, Db_Model_Dynamic, Db_Model_Sortable';
 
 	public $act_as_tree_parent_key = 'parent_id';
 	public $act_as_tree_sql_filter = null;

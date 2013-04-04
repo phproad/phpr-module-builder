@@ -2,7 +2,7 @@
 
 class Builder_Menus extends Admin_Controller
 {
-	public $implement = 'Db_ListBehavior, Db_FormBehavior';
+	public $implement = 'Db_List_Behavior, Db_Form_Behavior';
 	public $list_model_class = 'Builder_Menu';
 	public $list_record_url = null;
 
@@ -164,14 +164,14 @@ class Builder_Menus extends Admin_Controller
 
 			if ($item->is_new_record())
 			{
-				$item->init_columns_info();
+				$item->init_columns();
 				$item->class_name = post('menu_item_class_name', 'Builder_Link_Menu_Item');
-				$item->define_form_fields('create');
+				$item->init_form_fields('create');
 			}
 			else
 			{
-				$item->init_columns_info();
-				$item->define_form_fields();
+				$item->init_columns();
+				$item->init_form_fields();
 			}
 
 			$this->view_data['item'] = $item;
@@ -203,8 +203,8 @@ class Builder_Menus extends Admin_Controller
 
 			$model->class_name = post('menu_item_class_name');
 			$model->menu_id = $parent_id;
-			$model->init_columns_info();
-			$model->define_form_fields();
+			$model->init_columns();
+			$model->init_form_fields();
 
 			$model->save(post('Builder_Menu_Item'), post('edit_session_key'));
 			$menu->items->add($model, post('edit_session_key'));
@@ -248,8 +248,8 @@ class Builder_Menus extends Admin_Controller
 			if ($item)
 			{
 				$menu->items->delete($item, $this->form_get_edit_session_key());
-				$item->init_columns_info();
-				$item->define_form_fields();
+				$item->init_columns();
+				$item->init_form_fields();
 				$item->delete();
 			}
 
