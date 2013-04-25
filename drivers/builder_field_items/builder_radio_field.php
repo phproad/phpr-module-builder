@@ -27,6 +27,8 @@ class Builder_Radio_Field extends Builder_Field_Base
 
 	public function display_element()
 	{
+		$current_value = $this->get_element_value();
+
 		$str = array();
 		$str[] = '<div class="control-group">';
 		$str[] = '<label class="control-label">';
@@ -35,18 +37,32 @@ class Builder_Radio_Field extends Builder_Field_Base
 		$str[] = '<div class="controls">';
 		
 		// Each option
-		foreach ($this->get_radio_options() as $option) {
+		foreach ($this->get_radio_options() as $option_name) {
 			$str[] = '<label class="radio '.(($this->display_inline) ? 'inline' : '').'">';
-			$str[] = '<input type="radio" id="'.$this->get_element_id().'" class="radio '.$this->get_element_class().'" name="'.$this->get_element_name().'" value="" />';
-			$str[] = $option;
+			$str[] = '<input type="radio" id="'.$this->get_element_id().'"';
+			$str[] = '  class="'.$this->get_element_class().'"';
+			$str[] = '  name="'.$this->get_element_name().'"';
+			$str[] = '  value="'.$option_name.'"';
+			$str[] = '  '.Phpr_Form::radio_state($option_name, $current_value).' />';
+			$str[] = $option_name;
 			$str[] = '</label>';
 		}
 		
 		// Custom entry
 		if ($this->allow_custom) {
 			$str[] = '<span class="custom-radio '.(($this->display_inline) ? 'inline' : '').'">';
-			$str[] = '<input type="radio" id="'.$this->get_element_id().'" class="radio '.$this->get_element_class().'" name="'.$this->get_element_name().'" value="" />';
-			$str[] = '<input type="text" id="'.$this->get_element_id().'-custom" class="custom '.$this->get_element_class().'" name="'.$this->get_custom_element_name().'" value="" />';
+			
+			$str[] = '<input type="radio" id="'.$this->get_element_id().'"';
+			$str[] = '  class="'.$this->get_element_class().'"';
+			$str[] = '  name="'.$this->get_element_name().'"';
+			$str[] = '  value="custom"';
+			$str[] = '  '.Phpr_Form::radio_state('custom', $current_value).' />';
+			
+			$str[] = '<input type="text" id="'.$this->get_element_id().'-custom"';
+			$str[] = '  class="custom '.$this->get_element_class().'"';
+			$str[] = '  name="'.$this->get_custom_element_name().'"';
+			$str[] = '  value="" />';
+
 			$str[] = '</span>';
 		}
 

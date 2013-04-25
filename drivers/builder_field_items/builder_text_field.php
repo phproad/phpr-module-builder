@@ -26,7 +26,11 @@ class Builder_Text_Field extends Builder_Field_Base
 		$str[] = '</label>';
 		$str[] = '<div class="controls">';
 
-		$str[] = '<input type="text" id="'.$this->get_element_id().'" class="'.$this->get_element_class().'" name="'.$this->get_element_name().'" value="'.$this->default_value.'" placeholder="'.$this->placeholder.'" />';
+		$str[] = '<input type="text" id="'.$this->get_element_id().'"';
+		$str[] = '  class="'.$this->get_element_class().'"';
+		$str[] = '  name="'.$this->get_element_name().'"';
+		$str[] = '  value="'.$this->get_element_value().'"';
+		$str[] = '  placeholder="'.$this->placeholder.'" />';
 
 		$str[] = '</div>';
 

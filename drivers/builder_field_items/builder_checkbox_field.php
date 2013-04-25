@@ -26,26 +26,48 @@ class Builder_Checkbox_Field extends Builder_Field_Base
 
 	public function display_element()
 	{
+		$selected_values = $this->get_element_value();
+		if (!$selected_values)
+			$selected_values = array();
+		
 		$str = array();
 		$str[] = '<div class="control-group">';
 		$str[] = '<label class="control-label">';
 		$str[] = $this->label;
 		$str[] = '</label>';
 		$str[] = '<div class="controls">';
-		
+
 		// Each option
-		foreach ($this->get_checkbox_options() as $option) {
+		foreach ($this->get_checkbox_options() as $option_name) {
+			$is_selected = in_array($option_name, $selected_values);
+
 			$str[] = '<label class="checkbox '.(($this->display_inline) ? 'inline' : '').'">';
-			$str[] = '<input type="checkbox" id="'.$this->get_element_id().'" class="checkbox '.$this->get_element_class().'" name="'.$this->get_element_name().'[]" value="" />';
-			$str[] = $option;
+			$str[] = '<input type="checkbox" id="'.$this->get_element_id().'"';
+			$str[] = '  class="'.$this->get_element_class().'"';
+			$str[] = '  name="'.$this->get_element_name().'[]"';
+			$str[] = '  value="'.$option_name.'"';
+			$str[] = '  '.Phpr_Form::checkbox_state($is_selected).' />';
+			$str[] = $option_name;
 			$str[] = '</label>';
 		}
 		
 		// Custom entry
 		if ($this->allow_custom) {
+			$is_selected = $is_selected = in_array('custom', $selected_values);
+
 			$str[] = '<span class="custom-checkbox '.(($this->display_inline) ? 'inline' : '').'">';
-			$str[] = '<input type="checkbox" id="'.$this->get_element_id().'" class="checkbox '.$this->get_element_class().'" name="'.$this->get_element_name().'[]" value="" />';
-			$str[] = '<input type="text" id="'.$this->get_element_id().'-custom" class="custom '.$this->get_element_class().'" name="'.$this->get_custom_element_name().'" value="" />';
+			
+			$str[] = '<input type="checkbox" id="'.$this->get_element_id().'"';
+			$str[] = '  class="'.$this->get_element_class().'"';
+			$str[] = '  name="'.$this->get_element_name().'[]"';
+			$str[] = '  value="custom"';
+			$str[] = '  '.Phpr_Form::checkbox_state($is_selected).' />';
+
+			$str[] = '<input type="text" id="'.$this->get_element_id().'-custom"';
+			$str[] = '  class="custom '.$this->get_element_class().'"';
+			$str[] = '  name="'.$this->get_custom_element_name().'"';
+			$str[] = '  value="" />';
+
 			$str[] = '</span>';
 		}
 

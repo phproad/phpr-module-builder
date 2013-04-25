@@ -25,11 +25,12 @@ class Builder_Datepicker_Field extends Builder_Field_Base
 		$str[] = '</label>';
 		$str[] = '<div class="controls">';
 
-		$str[] = form_widget('xxx', array(
+		$str[] = form_widget($this->code, array(
 			'class' => 'Db_DatePicker_Widget',
 			'css_class' => $this->get_element_class(),
 			'field_id' => $this->get_element_id(),
 			'field_name' => $this->get_element_name(),
+			'field_value' => $this->get_element_value(),
 			'allow_past_dates' => $this->allow_past_dates
 		));
 

@@ -26,8 +26,11 @@ class Builder_Textarea_Field extends Builder_Field_Base
 		$str[] = '</label>';
 		$str[] = '<div class="controls">';
 
-		$str[] = '<textarea id="'.$this->get_element_id().'" class="'.$this->get_element_class().'" name="'.$this->get_element_name().'" placeholder="'.$this->placeholder.'">'.$this->default_value.'</textarea>';
-
+		$str[] = '<textarea id="'.$this->get_element_id().'"';
+		$str[] = '  class="'.$this->get_element_class().'"';
+		$str[] = '  name="'.$this->get_element_name().'"';
+		$str[] = '  placeholder="'.$this->placeholder.'">'.$this->get_element_value().'</textarea>';
+		
 		$str[] = '</div>';
 
 		// Comment

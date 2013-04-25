@@ -44,11 +44,31 @@ class Builder_Field_Base extends Phpr_Driver_Base
 	 */
 	public function init_config_data($host) { }
 
+	// Returns a string rendering the form field
+	public function display_element() {}
+
+	// Getters
+	// 
+
 	// Returns a summary of the field's options or settings.
 	public function get_summary() {}
 
-	// Returns a string rendering the form field
-	public function display_element() {}
+	// HTML element value
+	public function get_element_value() 
+	{
+		$options = $this->get_form_options();
+		$array_name = $options->field_array_name;
+		$code = $this->code;
+		
+		if ($array_name && isset($options->data[$array_name][$code]))
+			$value = $options->data[$array_name][$code];
+		else if (isset($options->data[$code]))
+			$value = $options->data[$code];
+		else 
+			$value = $this->default_value;
+
+		return $value;
+	}
 
 	// HTML element name
 	public function get_element_name() 
@@ -64,7 +84,7 @@ class Builder_Field_Base extends Phpr_Driver_Base
 	public function get_element_class() 
 	{
 		$class = array();
-		$code = $this->get_code();
+		$type_code = $this->get_code();
 		$options = $this->get_form_options();
 
 		// CSS for all fields
@@ -72,8 +92,8 @@ class Builder_Field_Base extends Phpr_Driver_Base
 			$class[] = $options->field_class;
 
 		// CSS for just this field type
-		if (isset($options->field_classes[$code]))
-			$class[] = $options->field_classes[$code];
+		if (isset($options->field_classes[$type_code]))
+			$class[] = $options->field_classes[$type_code];
 
 		// CSS defined by UI
 		if (strlen($this->element_class))
@@ -82,7 +102,7 @@ class Builder_Field_Base extends Phpr_Driver_Base
 			$class[] = "builder-".$this->code;
 
 		// CSS for field type
-		$class[] = "builder-" . Phpr_Inflector::slugify($code);
+		$class[] = "builder-" . Phpr_Inflector::slugify($type_code);
 
 		return implode(' ', $class);
 	}

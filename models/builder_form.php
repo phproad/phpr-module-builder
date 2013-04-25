@@ -42,7 +42,8 @@ class Builder_Form extends Db_ActiveRecord
 				'container_class' => 'form',
 				'field_array_name' => null,
 				'field_class' => null, 
-				'field_classes' => array()
+				'field_classes' => array(),
+				'data' => array(),
 			), $options);
 
 		$str = '';
