@@ -35,4 +35,21 @@ class Builder_Form extends Db_ActiveRecord
 			'show_delete_icon' => true,
 		))->tab('Form');  		
 	}
+
+	public function display_form($options = array())
+	{
+		$options = array_merge(array(
+				'container_class' => 'form',
+			), $options);
+
+		$str = '';
+		$str .= '<div class="'.$options['container_class'].'">';
+
+		foreach ($this->fields as $field) {
+			$str .= $field->display_control();
+		}
+
+		$str .= '</div>';
+		return $str;
+	}	
 }

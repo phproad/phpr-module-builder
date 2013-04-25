@@ -5,7 +5,7 @@
 <? Phpr_View::begin_block("view") ?>
 	<?=flash()?>
 
-	<? if (!isset($fatalError)): ?>
+	<? if (!isset($fatal_error)): ?>
 		<div class="form-750">
 			<?=Phpr_Form::open_tag() ?>
 				<input type="hidden" name="new_flag" value="1" id="new_flag" />

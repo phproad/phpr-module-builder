@@ -3,7 +3,7 @@
 	<link rel="stylesheet" type="text/css" href="modules/builder/assets/stylesheets/css/menu_form.css">
 <? Phpr_View::end_block() ?>
 <? Phpr_View::begin_block("view") ?>
-	<? if (!isset($fatalError)): ?>
+	<? if (!isset($fatal_error)): ?>
 		<?= form_open(array('id'=>'form_element')) ?>
 
 			<? $this->form_render() ?>

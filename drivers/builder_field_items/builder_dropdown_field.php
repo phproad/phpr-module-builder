@@ -28,4 +28,39 @@ class Builder_Dropdown_Field extends Builder_Field_Base
 		return str_replace(array("\r", "\n"), ', ', $host->options);
 	}
 
+	public function display_control()
+	{
+		$str = array();
+		$str[] = '<div class="control-group">';
+		$str[] = '<label class="control-label">';
+		$str[] = $this->label;
+		$str[] = '</label>';
+		$str[] = '<div class="controls">';
+		
+		$str[] = '<select name="">';
+		// Each option
+		foreach ($this->get_dropdown_options() as $option) {
+			$str[] = '<option value="'.$option.'">';
+			$str[] = $option;
+			$str[] = '</option>';
+		}
+		
+		$str[] = '</select>';
+
+		$str[] = '</div>';
+
+		// Comment
+		if (strlen($this->comment))
+			$str[] = '<span class="help-block">'.$this->comment.'</span>';
+
+		$str[] = '</div>';
+
+		return implode(PHP_EOL, $str);
+	}
+
+	public function get_dropdown_options() 
+	{
+		$options = explode("\n", $this->options);
+		return $options;
+	}
 }

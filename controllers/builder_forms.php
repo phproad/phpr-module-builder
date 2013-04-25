@@ -65,7 +65,7 @@ class Builder_Forms extends Admin_Controller
 		if ($model->is_new_record()) {
 			$model->class_name = post('class_name');
 			$model->form_fields_defined = false;
-			$model->reset_form_fields()->init_form_fields();
+			$model->init_form_fields(null, true);
 		}
 	}
 
@@ -74,7 +74,7 @@ class Builder_Forms extends Admin_Controller
 		if ($model->is_new_record()) {
 			$model->class_name = post('class_name');
 			$model->form_fields_defined = false;
-			$model->reset_form_fields()->init_form_fields();
+			$model->init_form_fields(null, true);
 		}
 	}
 

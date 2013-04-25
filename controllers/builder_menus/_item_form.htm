@@ -1,7 +1,7 @@
 <div id="edit_item_form" class='item_form'>
 	<h2><?= $item->new_record ? 'Add' : 'Edit' ?> Menu Item (<?= $item->get_type_name() ?>)</h2>
 	<?= Phpr_Form::open_tag() ?>
-		<? if (!isset($fatalError)): ?>
+		<? if (!isset($fatal_error)): ?>
 		<? if ($item->is_new_record()): ?><?=form_hidden('new_object_flag', 1, 'id="new_object_flag"')?><? endif ?>
 		<input type="hidden" name="item_id" value="<?= $item_id ?>"/>
 		<input type="hidden" name="menu_item_class_name" value="<?= $item->class_name ?>"/>

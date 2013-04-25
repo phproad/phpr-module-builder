@@ -53,13 +53,12 @@ class Builder_Menu extends Db_ActiveRecord
 	}
 
 
-	public function display_frontend($options = array(), &$str = null)
+	public function display_menu($options = array(), &$str = null)
 	{
 		$options = array_merge(array(
 				'class_dropdown_container' => 'has-dropdown',
 				'class_dropdown' => 'dropdown'
-			), 
-			$options);
+			), $options);
 
 		if (!$str)
 			$str = "";
@@ -71,7 +70,7 @@ class Builder_Menu extends Db_ActiveRecord
 		
 		foreach ($children as $child)
 		{
-			$child->display_frontend($options, $str);
+			$child->display_menu($options, $str);
 		}
 
 		return $str;

@@ -134,7 +134,7 @@ class Builder_Menu_Item extends Db_ActiveRecord
 	// Service methods
 	//
 
-	public function display_frontend($options = array(), &$str = null)
+	public function display_menu($options = array(), &$str = null)
 	{
 		if (!$str)
 			$str = "";
@@ -169,7 +169,7 @@ class Builder_Menu_Item extends Db_ActiveRecord
 			$str .= '<ul class="'.$ul_class.'">'.PHP_EOL;
 			foreach ($children as $child)
 			{
-				$child->display_frontend($options, $str);
+				$child->display_menu($options, $str);
 			}
 			$str .= "</ul>".PHP_EOL;
 		}
