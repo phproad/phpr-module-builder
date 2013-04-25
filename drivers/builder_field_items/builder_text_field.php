@@ -6,6 +6,7 @@ class Builder_Text_Field extends Builder_Field_Base
 	{
 		return array(
 			'name' => 'Text Box',
+			'code' => 'text',
 			'description' => 'Single line text input'
 		);
 	}
@@ -16,7 +17,7 @@ class Builder_Text_Field extends Builder_Field_Base
 		$host->add_field('placeholder', 'Placeholder', 'right', db_varchar)->comment('Text to display inside the field when empty. ')->tab('Properties');
 	}
 
-	public function display_control()
+	public function display_element()
 	{
 		$str = array();
 		$str[] = '<div class="control-group">';
@@ -25,7 +26,7 @@ class Builder_Text_Field extends Builder_Field_Base
 		$str[] = '</label>';
 		$str[] = '<div class="controls">';
 
-		$str[] = '<input type="text" name="" value="'.$this->default_value.'" placeholder="'.$this->placeholder.'" />';
+		$str[] = '<input type="text" id="'.$this->get_element_id().'" class="'.$this->get_element_class().'" name="'.$this->get_element_name().'" value="'.$this->default_value.'" placeholder="'.$this->placeholder.'" />';
 
 		$str[] = '</div>';
 

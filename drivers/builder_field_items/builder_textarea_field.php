@@ -6,6 +6,7 @@ class Builder_Textarea_Field extends Builder_Field_Base
 	{
 		return array(
 			'name' => 'Text Area',
+			'code' => 'textarea',
 			'description' => 'Multiple line text input'
 		);
 	}
@@ -16,7 +17,7 @@ class Builder_Textarea_Field extends Builder_Field_Base
 		$host->add_field('placeholder', 'Placeholder', 'full', db_varchar)->comment('Text to display inside the field when empty. ')->tab('Properties');
 	}
 
-	public function display_control()
+	public function display_element()
 	{
 		$str = array();
 		$str[] = '<div class="control-group">';
@@ -25,7 +26,7 @@ class Builder_Textarea_Field extends Builder_Field_Base
 		$str[] = '</label>';
 		$str[] = '<div class="controls">';
 
-		$str[] = '<textarea name="" placeholder="'.$this->placeholder.'">'.$this->default_value.'</textarea>';
+		$str[] = '<textarea id="'.$this->get_element_id().'" class="'.$this->get_element_class().'" name="'.$this->get_element_name().'" placeholder="'.$this->placeholder.'">'.$this->default_value.'</textarea>';
 
 		$str[] = '</div>';
 

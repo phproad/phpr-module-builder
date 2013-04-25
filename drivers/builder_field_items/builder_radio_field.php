@@ -6,6 +6,7 @@ class Builder_Radio_Field extends Builder_Field_Base
 	{
 		return array(
 			'name' => 'Radio',
+			'code' => 'radio',
 			'description' => 'Single choice radio buttons'
 		);
 	}
@@ -24,7 +25,7 @@ class Builder_Radio_Field extends Builder_Field_Base
 		return str_replace(array("\r", "\n"), ', ', $host->options);
 	}
 
-	public function display_control()
+	public function display_element()
 	{
 		$str = array();
 		$str[] = '<div class="control-group">';
@@ -36,7 +37,7 @@ class Builder_Radio_Field extends Builder_Field_Base
 		// Each option
 		foreach ($this->get_radio_options() as $option) {
 			$str[] = '<label class="radio '.(($this->display_inline) ? 'inline' : '').'">';
-			$str[] = '<input type="radio" name="XXXXX" value="" class="radio" />';
+			$str[] = '<input type="radio" id="'.$this->get_element_id().'" class="radio '.$this->get_element_class().'" name="'.$this->get_element_name().'" value="" />';
 			$str[] = $option;
 			$str[] = '</label>';
 		}
@@ -44,8 +45,8 @@ class Builder_Radio_Field extends Builder_Field_Base
 		// Custom entry
 		if ($this->allow_custom) {
 			$str[] = '<span class="custom-radio '.(($this->display_inline) ? 'inline' : '').'">';
-			$str[] = '<input type="radio" name="XXXXX" value="" class="radio" />';
-			$str[] = '<input type="text" name="XXXXXCUSTOM" value="" />';
+			$str[] = '<input type="radio" id="'.$this->get_element_id().'" class="radio '.$this->get_element_class().'" name="'.$this->get_element_name().'" value="" />';
+			$str[] = '<input type="text" id="'.$this->get_element_id().'-custom" class="custom '.$this->get_element_class().'" name="'.$this->get_custom_element_name().'" value="" />';
 			$str[] = '</span>';
 		}
 
@@ -64,5 +65,10 @@ class Builder_Radio_Field extends Builder_Field_Base
 	{
 		$options = explode("\n", $this->options);
 		return $options;
+	}
+
+	public function get_custom_element_name() 
+	{
+		return $this->code . '_custom';
 	}
 }

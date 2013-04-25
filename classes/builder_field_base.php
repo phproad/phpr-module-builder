@@ -9,6 +9,7 @@ class Builder_Field_Base extends Phpr_Driver_Base
 	{
 		return array(
 			'name' => 'Unknown',
+			'code' => 'unknown',
 			'description' => 'Unknown form field'
 		);
 	}
@@ -22,6 +23,12 @@ class Builder_Field_Base extends Phpr_Driver_Base
 	{
 		$info = $this->get_info();
 		return (isset($info['name'])) ? $info['name'] : false;
+	}
+
+	public function get_code() 
+	{
+		$info = $this->get_info();
+		return (isset($info['code'])) ? $info['code'] : false;
 	}
 
 	public function get_description() 
@@ -41,6 +48,52 @@ class Builder_Field_Base extends Phpr_Driver_Base
 	public function get_summary() {}
 
 	// Returns a string rendering the form field
-	public function display_control() {}
+	public function display_element() {}
+
+	// HTML element name
+	public function get_element_name() 
+	{
+		$options = $this->get_form_options();
+		if ($options->field_array_name)
+			return $options->field_array_name.'['.$this->code.']';
+		else
+			return $this->code;
+	}
+	
+	// HTML element CSS class
+	public function get_element_class() 
+	{
+		$class = array();
+		$code = $this->get_code();
+		$options = $this->get_form_options();
+
+		// CSS for all fields
+		if ($options->field_class)
+			$class[] = $options->field_class;
+
+		// CSS for just this field type
+		if (isset($options->field_classes[$code]))
+			$class[] = $options->field_classes[$code];
+
+		// CSS defined by UI
+		if (strlen($this->element_class))
+			$class[] = $this->element_class;
+		else
+			$class[] = "builder-".$this->code;
+
+		// CSS for field type
+		$class[] = "builder-" . Phpr_Inflector::slugify($code);
+
+		return implode(' ', $class);
+	}
+
+	// HTML element identifier
+	public function get_element_id() 
+	{
+		if (strlen($this->element_id))
+			return $this->element_id;
+
+		return "id-builder-".$this->code;
+	}
 
 }

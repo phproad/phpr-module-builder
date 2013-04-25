@@ -6,6 +6,7 @@ class Builder_Checkbox_Field extends Builder_Field_Base
 	{
 		return array(
 			'name' => 'Check Box',
+			'code' => 'checkbox',
 			'description' => 'List of check boxes'
 		);
 	}
@@ -23,7 +24,7 @@ class Builder_Checkbox_Field extends Builder_Field_Base
 		return str_replace(array("\r", "\n"), ', ', $host->options);
 	}
 
-	public function display_control()
+	public function display_element()
 	{
 		$str = array();
 		$str[] = '<div class="control-group">';
@@ -35,7 +36,7 @@ class Builder_Checkbox_Field extends Builder_Field_Base
 		// Each option
 		foreach ($this->get_checkbox_options() as $option) {
 			$str[] = '<label class="checkbox '.(($this->display_inline) ? 'inline' : '').'">';
-			$str[] = '<input type="checkbox" name="" value="" class="checkbox" />';
+			$str[] = '<input type="checkbox" id="'.$this->get_element_id().'" class="checkbox '.$this->get_element_class().'" name="'.$this->get_element_name().'[]" value="" />';
 			$str[] = $option;
 			$str[] = '</label>';
 		}
@@ -43,8 +44,8 @@ class Builder_Checkbox_Field extends Builder_Field_Base
 		// Custom entry
 		if ($this->allow_custom) {
 			$str[] = '<span class="custom-checkbox '.(($this->display_inline) ? 'inline' : '').'">';
-			$str[] = '<input type="checkbox" name="" value="" class="checkbox" />';
-			$str[] = '<input type="text" name="" value="" />';
+			$str[] = '<input type="checkbox" id="'.$this->get_element_id().'" class="checkbox '.$this->get_element_class().'" name="'.$this->get_element_name().'[]" value="" />';
+			$str[] = '<input type="text" id="'.$this->get_element_id().'-custom" class="custom '.$this->get_element_class().'" name="'.$this->get_custom_element_name().'" value="" />';
 			$str[] = '</span>';
 		}
 
@@ -63,5 +64,10 @@ class Builder_Checkbox_Field extends Builder_Field_Base
 	{
 		$options = explode("\n", $this->options);
 		return $options;
+	}
+
+	public function get_custom_element_name() 
+	{
+		return $this->code . '_custom';
 	}
 }

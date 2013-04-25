@@ -6,6 +6,7 @@ class Builder_Datepicker_Field extends Builder_Field_Base
 	{
 		return array(
 			'name' => 'Date Picker',
+			'code' => 'datepicker',
 			'description' => 'Input for selecting a date'
 		);
 	}
@@ -15,7 +16,7 @@ class Builder_Datepicker_Field extends Builder_Field_Base
 		$host->add_field('allow_past_dates', 'Allow past dates', 'right', db_bool)->comment('Allow dates in the past to be selected.');
 	}	
 
-	public function display_control()
+	public function display_element()
 	{
 		$str = array();
 		$str[] = '<div class="control-group">';
@@ -26,9 +27,9 @@ class Builder_Datepicker_Field extends Builder_Field_Base
 
 		$str[] = form_widget('xxx', array(
 			'class' => 'Db_DatePicker_Widget',
-			'css_class' => 'XXXXX',
-			'field_id' => 'XXXXXX',
-			'field_name' => 'XXXXXX',
+			'css_class' => $this->get_element_class(),
+			'field_id' => $this->get_element_id(),
+			'field_name' => $this->get_element_name(),
 			'allow_past_dates' => $this->allow_past_dates
 		));
 

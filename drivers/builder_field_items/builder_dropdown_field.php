@@ -7,6 +7,7 @@ class Builder_Dropdown_Field extends Builder_Field_Base
 	{
 		return array(
 			'name' => 'Drop Down',
+			'code' => 'dropdown',
 			'description' => 'Drop down list of choices'
 		);
 	}
@@ -28,7 +29,7 @@ class Builder_Dropdown_Field extends Builder_Field_Base
 		return str_replace(array("\r", "\n"), ', ', $host->options);
 	}
 
-	public function display_control()
+	public function display_element()
 	{
 		$str = array();
 		$str[] = '<div class="control-group">';
@@ -37,7 +38,7 @@ class Builder_Dropdown_Field extends Builder_Field_Base
 		$str[] = '</label>';
 		$str[] = '<div class="controls">';
 		
-		$str[] = '<select name="">';
+		$str[] = '<select id="'.$this->get_element_id().'" class="'.$this->get_element_class().'" name="'.$this->get_element_name().'">';
 		// Each option
 		foreach ($this->get_dropdown_options() as $option) {
 			$str[] = '<option value="'.$option.'">';

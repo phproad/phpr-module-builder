@@ -13,11 +13,13 @@ class Builder_Form_Field extends Db_ActiveRecord
 	);
 
 	protected $added_fields = array();
-
 	protected $form_fields_defined = false;
 	protected static $cache = array();
 
+	protected $form_options = array();
+
 	public $belongs_to = array(
+		'form' => array('class_name'=>'Builder_Form', 'foreign_key'=>'form_id')
 	);
 
 	public function define_columns($context = null)
@@ -83,6 +85,16 @@ class Builder_Form_Field extends Db_ActiveRecord
 			$this->extend_with($this->class_name);
 
 		return true;
+	}
+
+	public function set_form_options($options = array()) 
+	{
+		$this->form_options = $options;
+	}
+
+	public function get_form_options()
+	{
+		return (object)$this->form_options;
 	}
 
 	// Custom columns

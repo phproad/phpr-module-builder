@@ -5,7 +5,7 @@ class Builder_Form extends Db_ActiveRecord
 	public $table_name = 'builder_forms';
 
 	public $has_many = array(
-		'fields'=>array('class_name'=>'Builder_Form_Field', 'foreign_key'=>'form_id', 'order'=>'sort_order, id', 'delete'=>true)
+		'fields' => array('class_name'=>'Builder_Form_Field', 'foreign_key'=>'form_id', 'order'=>'sort_order, id', 'delete'=>true)
 	);
 
 	public function define_columns($context = null)
@@ -40,13 +40,17 @@ class Builder_Form extends Db_ActiveRecord
 	{
 		$options = array_merge(array(
 				'container_class' => 'form',
+				'field_array_name' => null,
+				'field_class' => null, 
+				'field_classes' => array()
 			), $options);
 
 		$str = '';
 		$str .= '<div class="'.$options['container_class'].'">';
 
 		foreach ($this->fields as $field) {
-			$str .= $field->display_control();
+			$field->set_form_options($options);
+			$str .= $field->display_element();
 		}
 
 		$str .= '</div>';
