@@ -1,10 +1,9 @@
 function menus_selected() {
-	return $('listCms_Menus_index_list_body').getElements('tr td.checkbox input').some(function(element){return element.checked});
+	return jQuery('#listCms_Menus_index_list_body').find('tr td.list-checkbox input:checked');
 }
 
 function delete_selected() {
-	if (!menus_selected())
-	{
+	if (!menus_selected()) {
 		alert('Please select layouts to delete.');
 		return false;
 	}
