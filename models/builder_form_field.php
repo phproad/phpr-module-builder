@@ -9,6 +9,7 @@ class Builder_Form_Field extends Db_ActiveRecord
 
 	public $custom_columns = array(
 		'field_type_name' => db_varchar,
+		'field_type_code' => db_varchar,
 		'field_summary' => db_varchar
 	);
 
@@ -103,6 +104,11 @@ class Builder_Form_Field extends Db_ActiveRecord
 	public function eval_field_type_name()
 	{
 		return $this->get_name();
+	}
+
+	public function eval_field_type_code()
+	{
+		return $this->get_code();
 	}
 
 	public function eval_field_summary()
