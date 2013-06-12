@@ -7,7 +7,7 @@ class Builder_Module extends Core_Module_Base
 		return new Core_Module_Detail(
 			"Builder",
 			"Builder Module",
-			"PHP Road",
+			"PHPRoad",
 			"http://phproad.com/"
 		);
 	}

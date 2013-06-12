@@ -14,7 +14,7 @@ class Builder_Menus extends Admin_Controller
 	public $form_redirect = null;
 	public $form_edit_save_auto_timestamp = true;
 	public $form_create_save_redirect = null;
-	public $form_flash_id = 'form_flash';
+	public $form_flash_id = 'form-flash';
 
 	public $form_edit_save_flash = 'The menu has been successfully saved';
 	public $form_create_save_flash = 'The menu has been successfully added';
