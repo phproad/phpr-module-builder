@@ -177,7 +177,7 @@ class Builder_Menus extends Admin_Controller
 			$this->view_data['item'] = $item;
 			$this->view_data['session_key'] = post('edit_session_key');
 			$this->view_data['item_id'] = post('item_id');
-			$this->view_data['trackTab'] = false;
+			$this->view_data['track_tab'] = false;
 		}
 		catch (Exception $ex)
 		{

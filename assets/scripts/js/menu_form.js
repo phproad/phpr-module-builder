@@ -8,17 +8,15 @@ function delete_selected() {
 		return false;
 	}
 
-	$('listCms_Menus_index_list_body').getForm().sendPhpr(
+	$('#listCms_Menus_index_list_body').phpr().post(
 		'index_on_delete_selected',
 		{
 			confirm: 'Do you really want to delete selected menu(s)?',
-			loadIndicator: {show: false},
-			onBeforePost: LightLoadingIndicator.show.pass('Loading...'),
-			onComplete: LightLoadingIndicator.hide,
+			customIndicator: LightLoadingIndicator,
 			onAfterUpdate: update_scrollable_toolbars,
-			update: 'templates_page_content'
+			update: '#templates_page_content'
 		}
-	);
+	).send();
 	return false;
 }
 
@@ -30,28 +28,28 @@ jQuery(document).ready(function() {
 function updateItemList() {
 	cancelPopup();
 
-	$('item_list').getForm().sendPhpr(
+	$('#item_list').phpr().post(
 		'on_update_item_list',
 		{
-			update: 'item_list',
+			update: '#item_list',
 			loadIndicator: {
 				show: true,
-				element: 'item_list',
+				element: '#item_list',
 				hideOnSuccess: true,
 				injectInElement: true,
 				src: 'phproad/assets/images/form_load_30x30.gif'
 			},
-			onSuccess: make_items_sortable
+			success: make_items_sortable
 		}
-	)
+	).send();
 }
 
 function make_items_sortable(session_key) {
-	if (!$('item_list'))
+	if (!$('#item_list').length)
 		return;
 
-	jQuery($('item_list')).css('visibility', 'visible');
-	var list = jQuery($('item_list')).find('ol.nestedsortable');
+	jQuery('#item_list').css('visibility', 'visible');
+	var list = jQuery('#item_list').find('ol.nestedsortable');
 
 	list.nestedSortable({
 		disableNesting: 'no-nest',
@@ -74,25 +72,23 @@ function make_items_sortable(session_key) {
 				return jQuery(this).attr('item_id').match(/(?:.+)[-=_](.+)/);
 			}).get().join(',');
 
-			$('item_list').getForm().sendPhpr('on_set_item_orders', {
-				loadIndicator: {show: false},
-				onBeforePost: LightLoadingIndicator.show.pass('Loading...'),
-				onComplete: LightLoadingIndicator.hide,
-				extraFields: {
+			$('#item_list').phpr().post('on_set_item_orders', {
+				customIndicator: LightLoadingIndicator,
+				data: {
 					sort_order: sorted_item_ids,
 					nesting_order: list.nestedSortable('serialize', {'attribute':'item_id'})
 				}
-			});
+			}).send();
 		}
 	});
 }
 
 function delete_item(item_id) {
-		return $('item_list').getForm().sendPhpr('on_delete_item', {
+	return $('#item_list').phpr().post('on_delete_item', {
 		confirm: 'Do you really want to delete this menu item? Any child items will be kept.',
-		onFailure: popupAjaxError,
-		update: 'item_list',
-		extraFields: {
+		error: popupAjaxError,
+		update: '#item_list',
+		data: {
 			item_id: item_id
 		},
 		loadIndicator: {
@@ -102,7 +98,7 @@ function delete_item(item_id) {
 			injectInElement: true,
 			src: 'phproad/assets/images/form_load_30x30.gif'
 		}
-	});
+	}).send();
 }
 
 /*
