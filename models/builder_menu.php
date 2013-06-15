@@ -53,26 +53,33 @@ class Builder_Menu extends Db_ActiveRecord
 	}
 
 
-	public function display_menu($options = array(), &$str = null)
+	public function display_menu($options = array())
 	{
 		$options = array_merge(array(
-				'class_dropdown_container' => 'has-dropdown',
-				'class_dropdown' => 'dropdown'
-			), $options);
+			'container_class' => 'menu',
+			'class_dropdown_container' => 'has-dropdown',
+			'class_dropdown' => 'dropdown',
+			'active_url' => null
+		), $options);
 
-		if (!$str)
-			$str = "";
-
-		$children = $this->list_root_items();
-
-		if (!$children->count)
-			return $str;
-		
-		foreach ($children as $child)
-		{
-			$child->display_menu($options, $str);
+		// Get active URL from CMS controller
+		if ($options['active_url'] === null) {
+			$controller = Cms_Controller::get_instance();
+			$page = ($controller) ? $controller->page : null;
+			$options['active_url'] = ($page) ? $page->url : null;
 		}
 
+		// Build string
+		$str = '';
+		$str .= '<div class="'.$options['container_class'].'">';
+
+		foreach ($this->list_root_items() as $item) {
+			$item->set_menu_options($options);
+			$str .= $item->display_menu();
+		}
+
+		$str .= '</div>';
 		return $str;
 	}
+
 }

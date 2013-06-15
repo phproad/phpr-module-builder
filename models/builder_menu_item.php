@@ -13,6 +13,8 @@ class Builder_Menu_Item extends Db_ActiveRecord
 	protected $added_fields = array();
 	protected $form_fields_defined = false;
 
+	protected $menu_options = array();
+
 	public static function create($values = null)
 	{
 		return new self($values);
@@ -36,12 +38,6 @@ class Builder_Menu_Item extends Db_ActiveRecord
 		
 		$this->form_context = $context;
 
-		$this->add_form_field('label', 'left')->tab('Properties');
-		$this->add_form_field('title', 'right')->tab('Properties');
-		$this->add_form_field('element_id', 'left')->tab('Properties')->comment('This ID will be bound to the list item (LI) tag', 'above');
-		$this->add_form_field('element_class', 'right')->tab('Properties')->comment('This class will be added to the list item (LI) tag', 'above');
-		$this->add_form_field('url_suffix', 'left')->tab('Properties')->comment('Example: #hash_anchor', 'above');
-
 		// Field driver extension
 		if ($this->init_item_extension()) {
 			$this->build_config_ui($this, $context);
@@ -50,6 +46,12 @@ class Builder_Menu_Item extends Db_ActiveRecord
 			if ($this->is_new_record())
 				$this->init_config_data($this);
 		}		
+
+		$this->add_form_field('label', 'left')->tab('Properties');
+		$this->add_form_field('title', 'right')->tab('Properties');
+		$this->add_form_field('element_id', 'left')->tab('Properties')->comment('This ID will be bound to the list item (LI) tag', 'above');
+		$this->add_form_field('element_class', 'right')->tab('Properties')->comment('This class will be added to the list item (LI) tag', 'above');
+		$this->add_form_field('url_suffix', 'left')->tab('Properties')->comment('Example: #hash_anchor', 'above');
 	}
 
 	//
@@ -59,22 +61,6 @@ class Builder_Menu_Item extends Db_ActiveRecord
 	public function after_fetch()
 	{
 		$this->init_item_extension();
-	}
-
-	//
-	// Service methods
-	// 
-
-	public function init_item_extension()
-	{
-		if (!strlen($this->class_name))
-			return false;
-
-		// Mixin class
-		if ($this->class_name && !$this->is_extended_with($this->class_name))
-			$this->extend_with($this->class_name);
-
-		return true;
 	}
 
 	public function before_delete($id = null)
@@ -105,6 +91,7 @@ class Builder_Menu_Item extends Db_ActiveRecord
 			$this->validate_menu_item($this);
 	}
 
+	//
 	// Dynamic model
 	// 
 
@@ -116,6 +103,7 @@ class Builder_Menu_Item extends Db_ActiveRecord
 		return $form_field;
 	}    
 
+	//
 	// Options
 	//
 
@@ -132,25 +120,44 @@ class Builder_Menu_Item extends Db_ActiveRecord
 	// Service methods
 	//
 
-	public function display_menu($options = array(), &$str = null)
+	public function init_item_extension()
 	{
-		if (!$str)
-			$str = "";
+		if (!strlen($this->class_name))
+			return false;
 
-		$controller = Builder_Controller::get_instance();
-		$page = ($controller) ? $controller->page : null;
+		// Mixin class
+		if ($this->class_name && !$this->is_extended_with($this->class_name))
+			$this->extend_with($this->class_name);
+
+		return true;
+	}
+
+	public function set_menu_options($options = array()) 
+	{
+		$this->menu_options = $options;
+	}
+
+	public function get_menu_options()
+	{
+		return (object)$this->menu_options;
+	}
+
+	public function display_menu()
+	{
 		$children = $this->list_children('sort_order');
+		$options = $this->get_menu_options();
+		$str = '';
 
+		// Determine URL
 		$a_href = root_url($this->url);
 		if ($this->url != '/' && $this->url_suffix) $a_href .= '/';
 		if ($this->url_suffix) $a_href .= $this->url_suffix;
 
 		$li_class = $this->element_class;
-		
-		$is_active = ($page && $page->url == $this->url);
+		$is_active = ($options->active_url == $this->url);
 
 		if ($children->count)
-			$li_class .= " ".$options['class_dropdown_container'];
+			$li_class .= " ".$options->class_dropdown_container;
 
 		if ($is_active)
 			$li_class .= " active";
@@ -160,28 +167,21 @@ class Builder_Menu_Item extends Db_ActiveRecord
 		$str .= $this->label;
 		$str .= '</a>'.PHP_EOL;
 
-		if ($children->count)
-		{
-			$ul_class = $options['class_dropdown'];
-
+		if ($children->count) {
+			
+			$ul_class = $options->class_dropdown;
 			$str .= '<ul class="'.$ul_class.'">'.PHP_EOL;
-			foreach ($children as $child)
-			{
-				$child->display_menu($options, $str);
+
+			foreach ($children as $child) {
+				$item->set_menu_options((array)$options);
+				$child->display_menu();
 			}
+
 			$str .= "</ul>".PHP_EOL;
 		}
 
 		$str .= "</li>".PHP_EOL;
 		return $str;
-	}
-
-	public function get_url($recache=false)
-	{
-		if (!$recache && $this->url)
-			return $this->url;
-
-		return $this->url;
 	}
 
 	// Relations

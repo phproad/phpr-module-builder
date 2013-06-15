@@ -21,11 +21,11 @@
 		<li item_id="item_<?=$item->id ?>" class="content-fill <?=Phpr_Html::zebra('menu_items')?> level<?=$level?>">
 			<div class="item">
 				<span class="title <?=$item->master_object_class?>">
-					<a href="javascript:;" onclick="<?=$url?>"><?=$item->label, ' (', $item->get_url(), ')' ?></a>
+					<a href="javascript:;" onclick="<?= $url ?>"><?=$item->label, ' (', $item->url, ')' ?></a>
 				</span>
 				<div class="float-right">
 					<a href="javascript:;" onclick="return delete_item(<?=$item->id ?>);" title="Delete this link" class="tooltip icon delete">Delete</a>
-					<a href="javascript:;" onclick="<?=$url ?>"><?=$item->get_name() ?></a>
+					<a href="javascript:;" onclick="<?= $url ?>"><?=$item->get_name() ?></a>
 				</div>
 			</div>
 

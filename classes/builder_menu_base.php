@@ -26,9 +26,7 @@ class Builder_Menu_Base extends Phpr_Driver_Base
 	public function init_config_data($host) { }
 
 	// Used to populate the menu item, eg. required fields URL and Label from a Blog Post
-	public function populate_menu_item($host)
-	{
-	}
+	public function validate_menu_item($host) { }
 
 	public function get_name() 
 	{
