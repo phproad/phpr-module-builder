@@ -13,7 +13,7 @@ function delete_selected() {
 		{
 			confirm: 'Do you really want to delete selected menu(s)?',
 			customIndicator: LightLoadingIndicator,
-			onAfterUpdate: update_scrollable_toolbars,
+			afterUpdate: update_scrollable_toolbars,
 			update: '#templates_page_content'
 		}
 	).send();
@@ -93,7 +93,7 @@ function delete_item(item_id) {
 		},
 		loadIndicator: {
 			show: true,
-			element: 'item_list',
+			element: '#item_list',
 			hideOnSuccess: true,
 			injectInElement: true,
 			src: 'phproad/assets/images/form_load_30x30.gif'

@@ -13,8 +13,8 @@
 			</div>
 			<div class="footer">
 				<?= admin_ajax_button('Save', 'on_manage_item', array('class'=>'default'), "
-					loadIndicator: {injectInElement: true},
-					onSuccess: updateItemList
+					loadIndicator: { injectInElement: true },
+					success: updateItemList
 				") ?>
 				<?= admin_button('Cancel', array('onclick'=>'return cancelPopup()')) ?>
 			</div>
