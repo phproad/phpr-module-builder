@@ -1,8 +1,7 @@
 <?
 	$root_dir = !isset($parent_item);
-	if ($root_dir)
-	{
-		//Get only top level menu items
+	if ($root_dir) {
+		// Get only top level menu items
 		$items = $menu->list_root_items($session_key);
 
 		$level = 1;
@@ -23,9 +22,16 @@
 				<span class="title <?=$item->master_object_class?>">
 					<a href="javascript:;" onclick="<?= $url ?>"><?=$item->label, ' (', $item->url, ')' ?></a>
 				</span>
-				<div class="float-right">
-					<a href="javascript:;" onclick="return delete_item(<?=$item->id ?>);" title="Delete this link" class="tooltip icon delete">Delete</a>
-					<a href="javascript:;" onclick="<?= $url ?>"><?=$item->get_name() ?></a>
+				<div class="pull-right">
+					<a href="javascript:;" 
+						onclick="return deleteMenuItem(<?=$item->id ?>);" 
+						title="Delete this link" 
+						class="delete-item has-tooltip">
+						<i class="icon-remove"></i>
+					</a>
+					<a href="javascript:;" onclick="<?= $url ?>" class="item-type">
+						<?=$item->get_name() ?>
+					</a>
 				</div>
 			</div>
 
