@@ -9,13 +9,9 @@ class Builder_Menu_Item extends Db_ActiveRecord
 	public $act_as_tree_parent_key = 'parent_id';
 	public $act_as_tree_sql_filter = null;
 	public $act_as_tree_name_field = 'label';
-	protected $categories_column;
-
+	
 	protected $added_fields = array();
-	protected $menu_type_obj = null;
-	public $class_name = null;
-
-	protected static $item_list = null;
+	protected $form_fields_defined = false;
 
 	public static function create($values = null)
 	{
@@ -24,7 +20,7 @@ class Builder_Menu_Item extends Db_ActiveRecord
 
 	public function define_columns($context = null)
 	{
-		$this->define_column('label', 'Navigation Label')->validation()->required()->fn('trim');
+		$this->define_column('label', 'Navigation Label')->validation()->fn('trim')->required();
 		$this->define_column('title', 'Title Attribute');
 		$this->define_column('url', 'URL')->invisible()->validation()->fn('trim');
 		$this->define_column('url_suffix', 'URL Suffix')->invisible()->validation()->fn('trim');
@@ -34,20 +30,52 @@ class Builder_Menu_Item extends Db_ActiveRecord
 
 	public function define_form_fields($context = null)
 	{
-		$type_obj = $this->get_menu_type_object();
+		// Prevent duplication
+		if ($this->form_fields_defined) return false; 
+		$this->form_fields_defined = true;
 		
-		if ($type_obj)
-			$type_obj->build_config_form($this, $context);        
-		
+		$this->form_context = $context;
+
 		$this->add_form_field('label', 'left')->tab('Properties');
 		$this->add_form_field('title', 'right')->tab('Properties');
 		$this->add_form_field('element_id', 'left')->tab('Properties')->comment('This ID will be bound to the list item (LI) tag', 'above');
 		$this->add_form_field('element_class', 'right')->tab('Properties')->comment('This class will be added to the list item (LI) tag', 'above');
 		$this->add_form_field('url_suffix', 'left')->tab('Properties')->comment('Example: #hash_anchor', 'above');
+
+		// Field driver extension
+		if ($this->init_item_extension()) {
+			$this->build_config_ui($this, $context);
+			
+			// Load field's default data
+			if ($this->is_new_record())
+				$this->init_config_data($this);
+		}		
 	}
 
-	// Events
 	//
+	// Events
+	// 
+
+	public function after_fetch()
+	{
+		$this->init_item_extension();
+	}
+
+	//
+	// Service methods
+	// 
+
+	public function init_item_extension()
+	{
+		if (!strlen($this->class_name))
+			return false;
+
+		// Mixin class
+		if ($this->class_name && !$this->is_extended_with($this->class_name))
+			$this->extend_with($this->class_name);
+
+		return true;
+	}
 
 	public function before_delete($id = null)
 	{
@@ -73,62 +101,32 @@ class Builder_Menu_Item extends Db_ActiveRecord
 
 	public function before_validation($session_key=null)
 	{
-		$this->get_menu_type_object()->build_menu_item($this);
+		if ($this->init_item_extension())
+			$this->validate_menu_item($this);
 	}
 
-	// Getters
-	//
+	// Dynamic model
+	// 
 
-	public function get_menu_type_object()
+	public function add_field($code, $title, $side = 'full', $type = db_text, $tab = 'Properties')
 	{
-		if ($this->menu_type_obj !== null)
-			return $this->menu_type_obj;
-
-		if (!$this->class_name)
-			$this->class_name = post('menu_item_class_name', 'Builder_Link_Menu_Item');
-
-		if (!Phpr::$class_loader->load($this->class_name))
-			throw new Phpr_ApplicationException("Class {$this->class_name} not found");
-
-		$class_name = $this->class_name;
-
-		return $this->menu_type_obj = new $class_name();
-	}
-
-	// Custom fields
-	//
-
-	public function add_field($code, $title, $side = 'full', $type = db_text, $tab = 'Event', $hidden = false)
-	{
-		$this->define_dynamic_column($code, $title, $type)->validation();
-		if (!$hidden)
-			$form_field = $this->add_dynamic_form_field($code, $side)->options_method('get_added_field_options')->option_state_method('get_added_field_option_state')->tab($tab);
-		else
-			$form_field = null;
-
+		$form_column = $this->define_dynamic_column($code, $title, $type);
+		$form_field = $this->add_dynamic_form_field($code, $side)->tab($tab);
 		$this->added_fields[$code] = $form_field;
-
 		return $form_field;
 	}    
 
-	public function get_added_field_options($db_name)
-	{     
-		$obj = $this->get_menu_type_object();
-		$method_name = "get_{$db_name}_options";
-		if (method_exists($obj, $method_name))
-			return $obj->$method_name($this);
+	// Options
+	//
 
-		throw new Phpr_SystemException("Method {$method_name} is not defined in {$this->class_name} class.");
-	}
-	
-	public function get_added_field_option_state($db_name, $key_value)
-	{       
-		$obj = $this->get_menu_type_object();
-		$method_name = "get_{$db_name}_option_state";
-		if (method_exists($obj, $method_name))
-			return $obj->$method_name($key_value);
-			
-		throw new Phpr_SystemException("Method {$method_name} is not defined in {$this->class_name} class.");
+	public function get_added_field_options($db_name, $key_value = -1)
+	{
+		$method_name = "get_".$db_name."_options";
+
+		if (!$this->method_exists($method_name))
+			throw new Phpr_SystemException("Method ".$method_name." is not defined in ".$this->class_name." class");
+
+		return $this->$method_name($key_value);
 	}
 
 	// Service methods
@@ -186,12 +184,6 @@ class Builder_Menu_Item extends Db_ActiveRecord
 		return $this->url;
 	}
 
-	public function get_type_name()
-	{
-		$info = $this->get_menu_type_object()->get_info();
-		return $info['name'];
-	}
-
 	// Relations
 	//
 
@@ -214,7 +206,7 @@ class Builder_Menu_Item extends Db_ActiveRecord
 
 		foreach ($order_ids as $index=>$id)
 		{
-			//For some reason 'NULL' doesn't work with arguments, so do it manually (with sanitation)
+			// For some reason 'NULL' doesn't work with arguments, so do it manually (with sanitation)
 			$parent_id = isset($parent_ids[$id]) && intval($parent_ids[$id]) ? intval($parent_ids[$id]) : 'NULL';
 
 			Db_Helper::query("update builder_menu_items set sort_order=:sort_order, parent_id=$parent_id where id=:id", array(

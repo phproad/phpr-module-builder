@@ -21,7 +21,7 @@ class Builder_Link_Menu extends Builder_Menu_Base
 			->validation()->required('Please a URL for this link');            
 	}
 
-	public function build_menu_item($host)
+	public function validate_menu_item($host)
 	{
 		$host->label = $host->manual_label;
 		$host->url = $host->manual_url;

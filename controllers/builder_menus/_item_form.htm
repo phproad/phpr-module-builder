@@ -1,31 +1,38 @@
 <div id="edit_item_form" class='item_form'>
-	<h2><?= $item->new_record ? 'Add' : 'Edit' ?> Menu Item (<?= $item->get_type_name() ?>)</h2>
+	<h2><?= $item->new_record ? 'Add' : 'Edit' ?> Menu Item (<?= $item->get_name() ?>)</h2>
 	<?= Phpr_Form::open_tag() ?>
 		<? if (!isset($fatal_error)): ?>
-		<? if ($item->is_new_record()): ?><?=form_hidden('new_object_flag', 1, 'id="new_object_flag"')?><? endif ?>
-		<input type="hidden" name="item_id" value="<?= $item_id ?>"/>
-		<input type="hidden" name="menu_item_class_name" value="<?= $item->class_name ?>"/>
-		<input type="hidden" name="phpr_uploader_model_class" value="<?= get_class($item) ?>"/>
+		
+			<!-- Passable fields -->
+			<? if ($item->is_new_record()): ?>
+				<input type="hidden" name="new_object_flag" value="1" id="new_object_flag" />
+			<? endif ?>
+			<input type="hidden" name="item_id" value="<?= $item_id ?>" />
+			<input type="hidden" name="menu_item_class_name" value="<?= $item->class_name ?>" />
+			<input type="hidden" name="phpr_uploader_model_class" value="<?= get_class($item) ?>" />
 
-		<div class="form-600">
-			<div class="content">
-				<? $this->form_render($item) ?>
+			<div class="form-600">
+				<div class="content">
+					<? $this->form_render($item) ?>
+				</div>
+				<div class="footer">
+					<?= admin_ajax_button('Save', 'on_manage_item', array('class'=>'btn-success'), "
+						loadIndicator: { injectInElement: true },
+						success: updateItemList
+					") ?>
+					<?= admin_button('Cancel', array('onclick'=>'return cancelPopup()')) ?>
+				</div>
 			</div>
-			<div class="footer">
-				<?= admin_ajax_button('Save', 'on_manage_item', array('class'=>'default'), "
-					loadIndicator: { injectInElement: true },
-					success: updateItemList
-				") ?>
-				<?= admin_button('Cancel', array('onclick'=>'return cancelPopup()')) ?>
-			</div>
-		</div>
+
 		<? else: ?>
+
 			<div class="content">
 				<?= flash() ?>
 			</div>
 			<div class="footer">
 				<?= admin_button('Cancel', array('onclick'=>'return cancelPopup()')) ?>
 			</div>
+
 		<? endif ?>
 	</form>
 </div>

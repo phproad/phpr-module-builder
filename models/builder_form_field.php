@@ -54,7 +54,6 @@ class Builder_Form_Field extends Db_ActiveRecord
 		$this->add_form_field('element_id', 'left')->comment('For design purposes, you can enter a unique identifier for this field.')->tab('Properties');
 		$this->add_form_field('element_class', 'right')->comment('For design purposes, you can give this field a CSS class.')->tab('Properties');
 
-
 		// Field driver extension
 		if ($this->init_field_extension()) {
 			$this->build_config_ui($this, $context);
@@ -65,6 +64,7 @@ class Builder_Form_Field extends Db_ActiveRecord
 		}
 	}
 
+	//
 	// Events
 	// 
 
@@ -73,6 +73,7 @@ class Builder_Form_Field extends Db_ActiveRecord
 		$this->init_field_extension();
 	}
 
+	//
 	// Service methods
 	// 
 

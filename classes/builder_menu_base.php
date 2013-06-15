@@ -14,9 +14,16 @@ class Builder_Menu_Base extends Phpr_Driver_Base
 	}
 
 	// Used to build the menu item form
-	public function build_config_form($host)
+	public function build_config_ui($host)
 	{
 	}
+
+	/**
+	 * Initializes configuration data when the field is first created
+	 * Use host object to access and set fields previously added with build_config_ui method.
+	 * @param $host ActiveRecord object containing configuration fields values
+	 */
+	public function init_config_data($host) { }
 
 	// Used to populate the menu item, eg. required fields URL and Label from a Blog Post
 	public function populate_menu_item($host)

@@ -12,13 +12,13 @@ class Builder_Page_Menu extends Builder_Menu_Base
 
 	public function build_config_ui($host)
 	{
-		$host->add_field('page_id', 'Page', 'full', db_number, 'Link')
+		$host->add_field('page_id', 'Page', 'full', db_number)
 			->comment('Please select the Page to link to', 'above')
 			->display_as(frm_dropdown)
 			->validation()->required('Please select the Page to link to');
 	}
 
-	public function build_menu_item($host)
+	public function validate_menu_item($host)
 	{
 
 		// Page has not changed, leave it alone

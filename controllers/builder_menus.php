@@ -192,7 +192,7 @@ class Builder_Menus extends Admin_Controller
 	{
 		try
 		{			
-			$menu = $this->getModelObj($parent_id);
+			$menu = $this->get_model_obj($parent_id);
 
 			$is_new_record = post('new_object_flag', false);
 
@@ -205,8 +205,8 @@ class Builder_Menus extends Admin_Controller
 			$model->menu_id = $parent_id;
 			$model->init_columns();
 			$model->init_form_fields();
-
 			$model->save(post('Builder_Menu_Item'), post('edit_session_key'));
+			
 			$menu->items->add($model, post('edit_session_key'));
 
 			Phpr::$session->flash['success'] = "Menu item added successfully.";
@@ -228,7 +228,7 @@ class Builder_Menus extends Admin_Controller
 		{
 			$this->display_partial('item_list', array(
 				'session_key'=>$this->form_get_edit_session_key(),
-				'menu' => $this->getModelObj($parent_id),
+				'menu' => $this->get_model_obj($parent_id),
 			));
 		}
 		catch (Exception $ex)
@@ -241,7 +241,7 @@ class Builder_Menus extends Admin_Controller
 	{
 		try
 		{
-			$menu = $this->getModelObj($parent_id);
+			$menu = $this->get_model_obj($parent_id);
 
 			$id = post('item_id');
 			$item = $id ? Builder_Menu_Item::create()->find($id) : Builder_Menu_Item::create();
@@ -276,7 +276,7 @@ class Builder_Menus extends Admin_Controller
 		Builder_Menu_Item::set_order_and_nesting(post('sort_order'), $parent_ids);
 	}
 
-	private function getModelObj($id)
+	private function get_model_obj($id)
 	{
 		return strlen($id) ? $this->form_find_model_object($id) : (new $this->form_model_class);
 	}
