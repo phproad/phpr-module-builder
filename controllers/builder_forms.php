@@ -19,7 +19,7 @@ class Builder_Forms extends Admin_Controller
 	public $form_edit_delete_flash = 'Form has been successfully deleted';
 
 	public $list_search_enabled = true;
-	public $list_search_fields = array('@business_name');
+	public $list_search_fields = array('@name');
 	public $list_search_prompt = 'find forms by name, login or email';
 
 	protected $required_permissions = array('builder:manage_forms');
