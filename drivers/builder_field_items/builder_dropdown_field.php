@@ -41,6 +41,9 @@ class Builder_Dropdown_Field extends Builder_Field_Base
 		$str[] = '<div class="controls">';
 		$str[] = '<select id="'.$this->get_element_id().'" class="'.$this->get_element_class().'" name="'.$this->get_element_name().'">';
 		
+		if ($this->empty_option !== false)
+			$str[] .= '<option value="">'.h($this->empty_option).'</option>'.PHP_EOL;
+
 		// Each option
 		foreach ($this->get_dropdown_options() as $option_name) {
 			$str[] = '<option value="'.$option_name.'" '.Phpr_Form::option_state($current_value, $option_name).'>';
